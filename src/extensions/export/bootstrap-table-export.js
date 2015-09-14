@@ -84,8 +84,20 @@
 
                     if (that.options.exportDataType === 'all' && that.options.pagination) {
                         that.togglePagination();
-                        doExport();
-                        that.togglePagination();
+                        if(that.options.sidePagination === 'server'){
+                            var exported = false;
+                            that.options.onLoadSuccess = function(){
+                                if(!exported){
+                                    doExport();
+                                    that.togglePagination();
+
+                                    exported = true;
+                                }
+                            }
+                        }else{
+                            doExport();
+                            that.togglePagination();
+                        }
                     } else if (that.options.exportDataType === 'selected') {
                         var data = that.getData(),
                             selectedData = that.getAllSelections();
